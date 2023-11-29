@@ -1,4 +1,5 @@
 type windowType = {
+  id: string;
   screenX: number;
   screenY: number;
   screenW: number;
@@ -8,6 +9,9 @@ type windowType = {
   updated: number;
 };
 const text = document.querySelector<HTMLPreElement>(".main-text");
+const but = document.querySelector<HTMLButtonElement>("#but");
+
+const stats = document.querySelector<HTMLPreElement>(".stats");
 
 function getScreens(): [string, windowType][] {
   return Object.entries(window.localStorage)
@@ -24,29 +28,31 @@ function getScreenId() {
     .sort((a, b) => a - b);
   return existingScreens.at(-1) + 1 || 1;
 }
-const screenId = `screen-${getScreenId()}`;
+const screenId = getScreenId();
 console.log(screenId);
 
 function setScreenData() {
   const windowData: windowType = {
+    id: screenId,
     screenX: window.screenX,
     screenY: window.screenY,
     screenH: window.screen.availHeight,
     screenW: window.screen.availWidth,
     width: window.outerWidth,
     height: window.outerHeight,
-    updated: Date.now()
+    updated: Date.now(),
   };
-  window.localStorage.setItem(screenId, JSON.stringify(windowData))
+  window.localStorage.setItem(screenId, JSON.stringify(windowData));
   // console.log(windowData)
-  return windowData
+  return windowData;
 }
 
 // console.log(getScreens());
 // console.log(getScreenId());
-console.log(setScreenData())
-let screenData: windowType = setScreenData()
-const newData = document.createElement('p')
+console.log(setScreenData());
+let screenData: windowType = setScreenData();
+const newData = document.createElement("p");
+text?.appendChild(newData);
 
 // for(let i = 0; i < Object.keys(screenData).length; i++){
 //   newData.innerText = parseInt(screenData.screenX)
@@ -54,12 +60,20 @@ const newData = document.createElement('p')
 
 // }
 
-text.addEventListener("click", () =>{
-  screenData = setScreenData()
-  // newData.innerText = `X: ${screenData.screenX} | Y: ${screenData.screenY}`  
-  alert(JSON.stringify(screenData))
-})
-window.addEventListener("drag", () => {
-  screenData = setScreenData()
-  newData.innerText = `X : ${screenData.screenX} | Y: ${screenData.screenY}`
-})
+but.addEventListener("click", () => {
+  stats.innerHTML = ""
+  screenData = setScreenData();
+  newData.innerText = `X : ${screenData.screenX} | Y: ${screenData.screenY}`;
+  console.log("ok");
+
+  if (!stats) return;
+  const existingScreens = Object.fromEntries(getScreens());
+  for(let s in existingScreens){
+    console.log(s)
+    let stat = document.createElement("pre")
+    stat.innerText = s + " ->" + JSON.stringify(existingScreens[s], null, 4)
+    console.log(existingScreens)
+    stats.appendChild(stat)
+  }
+  console.log(JSON.stringify(existingScreens, null, 4));
+});

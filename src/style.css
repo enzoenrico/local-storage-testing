@@ -40,6 +40,11 @@ h1 {
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+  display: flex;
+  align-items: center;
+  justify-items: center;
+  flex-direction: column;
+
 }
 
 .logo {
@@ -93,4 +98,24 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
+}
+
+.stats {
+  width: 80vw;
+  height: fit-content;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-column-gap: 5px;
+  grid-row-gap: 5px;
+}
+
+pre {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  border-radius: 10px;
+  border: 2px solid rosybrown;
+  width: 16vw;
+  height: 10rem;
 }
