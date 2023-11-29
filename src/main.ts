@@ -28,7 +28,7 @@ function getScreenId() {
     .sort((a, b) => a - b);
   return existingScreens.at(-1) + 1 || 1;
 }
-const screenId = getScreenId();
+const screenId = `screen-${getScreenId()}`
 console.log(screenId);
 
 function setScreenData() {
@@ -43,22 +43,19 @@ function setScreenData() {
     updated: Date.now(),
   };
   window.localStorage.setItem(screenId, JSON.stringify(windowData));
-  // console.log(windowData)
   return windowData;
 }
 
-// console.log(getScreens());
-// console.log(getScreenId());
+function removeScreen(){
+  console.log(`[!]Removing screen ${screenId}`)
+  window.localStorage.removeItem(screenId)
+}
+
+
 console.log(setScreenData());
 let screenData: windowType = setScreenData();
 const newData = document.createElement("p");
 text?.appendChild(newData);
-
-// for(let i = 0; i < Object.keys(screenData).length; i++){
-//   newData.innerText = parseInt(screenData.screenX)
-//   text.appendChild(newData)
-
-// }
 
 but.addEventListener("click", () => {
   stats.innerHTML = ""
@@ -69,11 +66,10 @@ but.addEventListener("click", () => {
   if (!stats) return;
   const existingScreens = Object.fromEntries(getScreens());
   for(let s in existingScreens){
-    console.log(s)
     let stat = document.createElement("pre")
     stat.innerText = s + " ->" + JSON.stringify(existingScreens[s], null, 4)
-    console.log(existingScreens)
     stats.appendChild(stat)
   }
-  console.log(JSON.stringify(existingScreens, null, 4));
 });
+
+window.addEventListener('beforeunload', removeScreen)
